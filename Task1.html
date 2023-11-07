@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dish Catalog</title>
+    <style>
+    body {
+        font-family:'Times New Roman';
+        background-image: url('bck.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        
+    }
+    
+    table, th, td {
+        border: 2px solid #ccc;
+    }
+    
+    th, td {
+        padding: 10px;
+        background-color: #f0f0f0;
+    }
+    
+    button {
+        margin-top: 10px;
+    }
+
+    span{
+        color: rgb(41, 91, 209);
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    </style>
+
+    <script>
+        let recipes = [];
+
+function showForm() {
+    document.getElementById('recipe-form').classList.toggle('hidden');
+}
+
+function addRecipe() {
+    const name = document.getElementById('recipe-name').value;
+    const ingredients = document.getElementById('recipe-ingredients').value;
+    const instructions = document.getElementById('recipe-instructions').value;
+
+    if (name && ingredients && instructions) {
+        const recipe = {
+            name: name,
+            ingredients: ingredients,
+            instructions: instructions
+        };
+        recipes.push(recipe);
+        displayRecipes();
+        clearForm();
+    }
+}
+
+function displayRecipes() {
+    const recipeTable = document.getElementById('recipe-table');
+    const recipeList = document.getElementById('recipe-list');
+    recipeTable.classList.remove('hidden');
+    recipeList.innerHTML = '';
+
+    recipes.forEach((recipe, index) => {
+        const row = recipeList.insertRow();
+        const nameCell = row.insertCell(0);
+        const ingredientsCell = row.insertCell(1);
+        const instructionsCell = row.insertCell(2);
+        const actionCell = row.insertCell(3);
+
+        nameCell.innerHTML = recipe.name;
+        ingredientsCell.innerHTML = recipe.ingredients;
+        instructionsCell.innerHTML = recipe.instructions;
+        actionCell.innerHTML = '<button onclick="editRecipe(' + index + ')">Edit</button> <button onclick="deleteRecipe(' + index + ')">Delete</button>';
+    });
+}
+
+function editRecipe(index) {
+    const recipe = recipes[index];
+    document.getElementById('recipe-name').value = recipe.name;
+    document.getElementById('recipe-ingredients').value = recipe.ingredients;
+    document.getElementById('recipe-instructions').value = recipe.instructions;
+    recipes.splice(index, 1);
+}
+
+function deleteRecipe(index) {
+    recipes.splice(index, 1);
+    displayRecipes();
+}
+
+function clearForm() {
+    document.getElementById('recipe-name').value = '';
+    document.getElementById('recipe-ingredients').value = '';
+    document.getElementById('recipe-instructions').value = '';
+}
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <center><h1>Welcome to Dish Catalog</h1>
+            <h2 style="background-color: aliceblue;">Our user-friendly platform empowers food enthusiasts, home cooks,
+             and professional chefs alike to share their favorite recipes. Whether you're a seasoned chef or
+             just starting your cooking journey, our website provides a seamless experience for adding,
+             editing, and deleting recipe's name, ingredients, and instructions with ease.</h2>
+        <h1>My Dish Catalog</h1>
+        <h2><span>Click the below button to add new recipe</span></h2></center>
+        <div id="recipe-form" class="hidden">
+            <h2>Add Recipe</h2>
+            <input type="text" id="recipe-name" placeholder="Recipe Name"><br><br>
+            <textarea id="recipe-ingredients" placeholder="Ingredients"></textarea><br><br>
+            <textarea id="recipe-instructions" placeholder="Instructions"></textarea><br><br>
+            <button onclick="addRecipe()">Save Recipe</button>
+            <button onclick="clearForm()">Clear Form</button>
+        </div>
+        <button onclick="showForm()">Add Recipe</button>
+        <table id="recipe-table" class="hidden">
+            <thead>
+                <tr>
+                    <th>Recipe Name</th>
+                    <th>Ingredients</th>
+                    <th>Instructions</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="recipe-list">
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>
