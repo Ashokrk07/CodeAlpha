@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Scheduler</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<script>
+    let details = [];
+    function scheduleTask() {
+  const task = document.getElementById("task").value;
+  const deadline = document.getElementById("deadline").value;
+  const email = document.getElementById("email").value;
+  const sendEmailNotification = document.getElementById("emailNotification").checked;
+
+  if (task && deadline && email && sendEmailNotification) {
+    // Simulate sending email notification (in a real application, this would be done on the server-side)
+    const detail = {
+            task: task,
+            deadline: deadline,
+            email: email
+        };
+        details.push(detail);
+
+    if (sendEmailNotification) {
+      window.alert(`Notification sent for task: ` + task + `\nMail: ` + email);
+    }
+
+
+    // Calculate time difference in milliseconds between deadline and current time
+    const deadlineTime = new Date(deadline).getTime();
+    const currentTime = new Date().getTime();
+    const timeDifference = deadlineTime - currentTime;
+
+    // Schedule push notification (in a real application, use push notification service like Firebase Cloud Messaging)
+    if (timeDifference > 0) {
+      setTimeout(() => {
+        window.alert(`Push notification for task: ${task}`);
+      }, timeDifference);
+    }
+
+    // Clear input fields
+    document.getElementById("task").value = "";
+    document.getElementById("deadline").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("emailNotification").checked = false;
+    displaydetails();
+  } 
+  else
+   {
+    window.alert("Please enter task, deadline and email.");
+  }
+}
+
+function displaydetails() {
+    const detailtable = document.getElementById('detail-table');
+    const detailList = document.getElementById('detail-list');
+    detailList.innerHTML = '';
+
+    details.forEach((detail, index) => {
+        const row = detailList.insertRow();
+        const taskCell = row.insertCell(0);
+        const deadlineCell = row.insertCell(1);
+        const emailCell = row.insertCell(2);
+        
+        taskCell.innerHTML = detail.task;
+        deadlineCell.innerHTML = detail.deadline;
+        emailCell.innerHTML = detail.email;
+    });
+}
+
+</script>
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">Task Scheduler</h1>
+    <div class="form-group">
+      <label for="task">Task:</label>
+      <input type="text" class="form-control" id="task">
+    </div>
+    <div class="form-group">
+      <label for="deadline">Deadline:</label>
+      <input type="datetime-local" class="form-control" id="deadline">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email Address:</label>
+        <input type="email" class="form-control" id="email" required>
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="emailNotification">
+      <label class="form-check-label" for="emailNotification">Send Email Notification</label>
+    </div>
+    <div class="container mb-5">
+    <button class="btn btn-primary mt-3" onclick="scheduleTask()">Schedule Task</button>
+  </div>
+  <div>
+  <table class="table table-bordered" id="detail-table">
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Deadline</th>
+            <th>Mail</th>
+        </tr>
+    </thead>
+    <tbody id="detail-list">
+    </tbody>
+</table>
+</div>
+</div>
+</body>
+</html>
