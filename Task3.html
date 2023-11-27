@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Issue Tracker</title>
+</head>
+
+<body style="background: linear-gradient(to right,#2ecc53, #3487db)">
+
+<div class="container mt-5">
+    <center><h2>Issue Tracker</h2></center>
+ <div>
+    <form class="form-group mt-3" id="issueForm">
+        <h3>Add Issue:</h3>
+        <div class="form-group">
+            <label for="issueTitle">Issue Title</label>
+            <input type="text" class="form-control" id="issueTitle" placeholder="Enter issue title" required>
+        </div>
+        <div class="form-group">
+            <label for="issueDescription">Issue Description</label>
+            <textarea class="form-control" id="issueDescription" rows="3" placeholder="Enter issue description" required></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="submitIssue()">Submit Issue</button>
+        <button type="button" class="btn btn-danger" onclick="clearIssue()">Clear Issue</button>
+
+    </form>
+ </div>
+    <hr>
+    <div>
+    <h3>Open Issues</h3>
+    <ul id="issueList" class="list-group">
+        <!-- Issues will be dynamically added here -->
+    </ul>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function submitIssue() {
+        const title = document.getElementById('issueTitle').value;
+        const description = document.getElementById('issueDescription').value;
+        const id = Math.floor(Math.random() * 100000000) + '';
+        if (title && description) {
+            const issueList = document.getElementById('issueList');
+           
+            // Create a new list item for the issue
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `
+                <span class="font-weight-bold mt-3">Id:</span> ${id}
+                <br>
+                <span class="font-weight-bold">Issue Title:</span> ${title}
+                <br>
+                <span class="font-weight-bold">Description:</span> ${description}
+                <br>
+                <div class="form-group mt-2">
+                    <label for="processState">Process State:</label>
+                    <select class="form-control" id="processState" onchange="changeProcessState(this)">
+                        <option value="">Select Option</option>
+                        <option value="open">Open</option>
+                        <option value="inProgress">In Progress</option>
+                        <option value="closed">Closed</option>
+                    </select><br>
+                    <button type="button" class="btn btn-danger" onclick="deleteIssue(this)">Delete</button>
+                </div>
+            `;
+
+            // Add the new issue to the list
+            issueList.appendChild(li);
+
+            // Clear the form inputs
+            document.getElementById('issueForm').reset();
+        } else {
+            alert('Please fill in both issue title and description.');
+        }
+    }
+
+    function clearIssue(){
+        document.getElementById('issueForm').reset();
+    }
+
+    function deleteIssue(button) {
+        const listItem = button.closest('li');
+        listItem.remove();
+    }
+
+    function changeProcessState(selectElement) {
+        const selectedState = selectElement.value;
+        const listItem = selectElement.closest('li');
+
+        // You can perform additional actions based on the selected state
+        // For now, let's just change the background color for demonstration purposes
+        switch (selectedState) {
+            case 'open':
+                listItem.style.backgroundColor = '#00d700'; // Green
+                break;
+            case 'inProgress':
+                listItem.style.backgroundColor = '#ffd700'; // Yellow
+                break;
+            case 'closed':
+                listItem.style.backgroundColor = '#d70000'; // Red
+                break;
+        }
+    }
+</script>
+
+</body>
+</html>
